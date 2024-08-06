@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
   push:
@@ -7,6 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10-dind
+        options: --privileged
 
     steps:
       - name: Checkout code
@@ -28,14 +33,21 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Set up Docker Compose
-        uses: docker/compose-action@v2
+        uses: docker/setup-buildx-action@v2
         with:
           version: '2.7.0'
 
       - name: Build Docker image
-        run: |
-          docker buildx create --use
-          docker buildx build --tag myspringboot2:latest --push .
+        run: docker-compose build
+
+      - name: Start services
+        run: docker-compose up -d
+
+      - name: Run tests
+        run: docker-compose exec -T application ./gradlew test
+
+      - name: Stop services
+        run: docker-compose down
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -47,11 +59,3 @@ jobs:
         run: |
           docker tag myspringboot2:latest ${{ secrets.DOCKERHUB_USERNAME }}/myspringboot2:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/myspringboot2:latest
-
-      - name: Set up Docker Compose
-        uses: docker/compose-action@v2
-
-      - name: Build and run Docker Compose
-        run: |
-          docker-compose build
-          docker-compose up -d
