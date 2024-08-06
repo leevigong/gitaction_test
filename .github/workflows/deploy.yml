@@ -21,14 +21,24 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Test network connection
-        run: curl -v telnet://172.27.8.165:22
-
-      - name: Scan SSH host key
+      - name: Set up SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          set -x
-          ssh-keyscan -v -H 172.27.8.165 || true
+          set -x  # Enable debugging
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
 
+      - name: Install Netcat
+        run: sudo apt-get install -y netcat
+
+      - name: Test network connection
+        run: nc -zv 172.27.8.165 22
+
+      - name: Test SSH connection
+        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 #      - name: Set up SSH key
 #        env:
 #          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
