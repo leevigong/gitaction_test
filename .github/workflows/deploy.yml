@@ -37,8 +37,10 @@ jobs:
         run: |
           set -x  # Enable debugging
           mkdir -p ~/.ssh
-          ssh-keyscan -v -H 172.27.8.165 >> ~/.ssh/known_hosts || { echo "ssh-keyscan failed"; exit 1; }
-      
+          ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 
       #      - name: Test SSH connection
 #        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
