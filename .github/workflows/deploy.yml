@@ -40,7 +40,7 @@ jobs:
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
       - name: Test SSH connection
-        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
+        run: ssh -vvv -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 
       #      - name: Test SSH connection
 #        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
