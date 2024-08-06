@@ -1,0 +1,44 @@
+# spring.application.name=page
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql_db:3306/test?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC
+    username: test
+    password: test1234
+
+#    url: jdbc:mysql://localhost:3306/kksc?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC
+#    username: kksc_user
+#    password: kksc_user
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create #update
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      show_sql: true
+      format_sql: true
+
+  profiles:
+    include: jwt
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 1000
+        one-indexed-parameters: false
+
+fileUploadBaseUrl : C:/kksc/src/main/resources/noticeFile
+
+  #logging:
+#  level:
+#    root: info
+#    org.springframework.web: info
+#    org.hibernate: info

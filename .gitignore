@@ -5,8 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 application.properties
-application.yml
-application-jwt.yml
+#application.yml
+#application-jwt.yml
 
 ### STS ###
 .apt_generated

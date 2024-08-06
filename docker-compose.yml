@@ -6,8 +6,8 @@ services:
     environment:
       MYSQL_DATABASE: test
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test1234
       TZ: 'Asia/Seoul'
     ports:
       - "43306:3306"
@@ -32,8 +32,8 @@ services:
       - "48080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/test?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_USERNAME: test
+      SPRING_DATASOURCE_PASSWORD: test1234
     depends_on:
       - database
     networks:

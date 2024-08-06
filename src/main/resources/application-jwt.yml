@@ -1,0 +1,10 @@
+jwt:
+  secret: spring-boot-study-KKSC-project-jwt-secret-key
+
+  access:
+    expiration: 86400 #60*60*24
+    header: Authorization
+
+  refresh:
+    expiration: 90
+    header: Authorization-refresh
