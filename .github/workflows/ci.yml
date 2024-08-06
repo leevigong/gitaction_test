@@ -52,7 +52,7 @@ jobs:
 #          docker tag myspringboot2:latest ${{ secrets.DOCKERHUB_USERNAME }}/myspringboot2:latest
 #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/myspringboot2:latest
 
-      - name: Set up SSH
+      - name: Set up SSH and Deploy
         run: |
           echo "Creating .ssh directory..."
           mkdir -p ~/.ssh
@@ -62,19 +62,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           echo "Scanning SSH host key..."
           ssh-keyscan -H 192.168.35.103 >> ~/.ssh/known_hosts
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Copy files to remote server
-        run: |
-          echo "Copying files to remote server..."
+          echo "SCP to remote server..."
           scp -rv . daeun@192.168.35.103:/C/Users/Daeun/deploy
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy on remote server
-        run: |
-          echo "Deploying on remote server..."
+          echo "Running deployment commands..."
           ssh -v daeun@192.168.35.103 'cd /C/Users/Daeun/deploy && docker-compose up -d --build'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
