@@ -36,7 +36,7 @@ jobs:
       - name: Set up SSH known hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
+          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
       - name: Public IP
         id: ip
