@@ -33,14 +33,14 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
       - name: Add known hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
 
-      - name: Test SSH connection
-        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
+#      - name: Test SSH connection
+#        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
+#
 #      - name: Attempt SSH key scan
 #        run: |
 #          set -x  # Enable debugging
