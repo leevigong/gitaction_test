@@ -44,14 +44,6 @@ jobs:
       - name: Start services
         run: docker-compose up -d
 
-      - name: Check Docker containers
-        run: docker ps
-
-      - name: Check Docker logs for mysql_db
-        run: docker logs mysql_db
-#      - name: Stop services
-#        run: docker-compose down
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -62,3 +54,14 @@ jobs:
         run: |
           docker tag myspringboot2:latest ${{ secrets.DOCKERHUB_USERNAME }}/myspringboot2:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/myspringboot2:latest
+
+      - name: Deploy to Remote Server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 192.168.35.103 >> ~/.ssh/known_hosts
+          scp -r . daeun@192.168.35.103:/C/Users/Daeun/deploy
+          ssh daeun@192.168.1.100 'cd /C/Users/Daeun/deploy && docker-compose up -d --build'
