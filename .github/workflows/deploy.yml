@@ -1,4 +1,4 @@
-name: Deploy to Remote Server
+name: ci & deploy
 
 on:
   push:
@@ -21,6 +21,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Set up SSH key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -30,12 +34,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Install Netcat
-        run: sudo apt-get install -y netcat
-
-      - name: Test network connection
-        run: nc -zv 172.27.8.165 22
-
       - name: Test SSH connection
         run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 
@@ -43,27 +41,27 @@ jobs:
         run: |
           set -x  # Enable debugging
           ssh-keyscan -v -H 172.27.8.165 || echo "ssh-keyscan failed"
-#      - name: Set up SSH key
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-#        run: |
-#          set -x  # Enable debugging
-#          mkdir -p ~/.ssh
-#          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
-#          chmod 600 ~/.ssh/id_rsa
-#
-#      - name: Scan SSH host key
-#        run: ssh-keyscan -v -H 172.27.8.165
-#
-#      - name: Test SSH connection
-#        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
+      #      - name: Set up SSH key
+      #        env:
+      #          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #        run: |
+      #          set -x  # Enable debugging
+      #          mkdir -p ~/.ssh
+      #          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
+      #          chmod 600 ~/.ssh/id_rsa
+      #
+      #      - name: Scan SSH host key
+      #        run: ssh-keyscan -v -H 172.27.8.165
+      #
+      #      - name: Test SSH connection
+      #        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 
-#    ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
-#
-#      - name: Copy files to remote server
-#        run: |
-#          scp -r . daeun@172.27.8.165:/home/daeun/deploy
-#
-#      - name: Deploy on remote server
-#        run: |
-#          ssh -v daeun@172.27.8.165 'cd /home/daeun/deploy && docker-compose up -d --build'
+      #    ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
+      #
+      #      - name: Copy files to remote server
+      #        run: |
+      #          scp -r . daeun@172.27.8.165:/home/daeun/deploy
+      #
+      #      - name: Deploy on remote server
+      #        run: |
+      #          ssh -v daeun@172.27.8.165 'cd /home/daeun/deploy && docker-compose up -d --build'
