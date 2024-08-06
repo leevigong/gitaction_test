@@ -45,7 +45,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Run tests
-        run: docker-compose exec -T application ./gradlew test
+        run: docker-compose exec -T application /app/gradlew test
 
       - name: Stop services
         run: docker-compose down
