@@ -27,6 +27,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    image: myspringboot2:latest
     ports:
       - "48080:8080"
     environment:
