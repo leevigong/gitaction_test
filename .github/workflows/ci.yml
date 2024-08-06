@@ -64,4 +64,4 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 192.168.35.103 >> ~/.ssh/known_hosts
           scp -r . daeun@192.168.35.103:/C/Users/Daeun/deploy
-          ssh daeun@192.168.1.100 'cd /C/Users/Daeun/deploy && docker-compose up -d --build'
+          ssh daeun@192.168.35.103 'cd /C/Users/Daeun/deploy && docker-compose up -d --build'
