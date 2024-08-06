@@ -38,6 +38,7 @@ jobs:
           set -x  # Enable debugging
           mkdir -p ~/.ssh
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
       - name: Get GitHub Actions IP
         id: get-ip
         uses: haythem/public-ip@v1.2
