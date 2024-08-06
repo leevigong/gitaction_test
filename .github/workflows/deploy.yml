@@ -33,11 +33,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-      - name: Add known hosts
+      - name: Set up SSH known hosts
         run: |
           set -x  # Enable debugging
           mkdir -p ~/.ssh
-          ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
+          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
       - name: Test SSH connection
         run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
