@@ -1,0 +1,27 @@
+name: Deploy Docker Container
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy Docker Container
+        run: |
+          ssh -o StrictHostKeyChecking=no username@your-local-server-ip << 'EOF'
+            cd /path/to/your/docker/project
+            docker-compose down
+            docker-compose up -d --build
+          EOF
