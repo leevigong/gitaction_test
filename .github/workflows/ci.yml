@@ -65,3 +65,4 @@ jobs:
           ssh-keyscan -H 192.168.35.103 >> ~/.ssh/known_hosts
           scp -rv . daeun@192.168.35.103:/C/Users/Daeun/deploy
           ssh -v daeun@192.168.35.103 'cd /C/Users/Daeun/deploy && docker-compose up -d --build'
+          
