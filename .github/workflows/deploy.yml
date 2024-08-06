@@ -21,20 +21,28 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Set up SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          set -x  # Enable debugging
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+      - name: Test network connection
+        run: curl -v telnet://172.27.8.165:22
 
       - name: Scan SSH host key
-        run: ssh-keyscan -v -H 172.27.8.165
+        run: |
+          set -x
+          ssh-keyscan -v -H 172.27.8.165 || true
 
-      - name: Test SSH connection
-        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
+#      - name: Set up SSH key
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#        run: |
+#          set -x  # Enable debugging
+#          mkdir -p ~/.ssh
+#          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
+#
+#      - name: Scan SSH host key
+#        run: ssh-keyscan -v -H 172.27.8.165
+#
+#      - name: Test SSH connection
+#        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 
 #    ssh-keyscan -H 172.27.8.165 >> ~/.ssh/known_hosts
 #
