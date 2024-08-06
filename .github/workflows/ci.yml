@@ -60,7 +60,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 192.168.35.103 >> ~/.ssh/known_hosts
           scp -r . daeun@192.168.35.103:/C/Users/Daeun/deploy
