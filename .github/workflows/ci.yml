@@ -44,6 +44,11 @@ jobs:
       - name: Start services
         run: docker-compose up -d
 
+      - name: Check Docker containers
+        run: docker ps
+
+      - name: Check Docker logs for mysql_db
+        run: docker logs mysql_db
 #      - name: Stop services
 #        run: docker-compose down
 
