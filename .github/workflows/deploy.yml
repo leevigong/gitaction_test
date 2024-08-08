@@ -25,30 +25,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Set up SSH known hosts
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-
-      - name: Public IP
-        id: ip
-        uses: haythem/public-ip@v1.3
-
-      - name: Print Public IP
-        run: |
-          echo ${{ steps.ip.outputs.ipv4 }}
-          echo ${{ steps.ip.outputs.ipv6 }}
-
-      - name: Test SSH connection
-        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
+      - name: SSH & DOCKER
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/${{ secrets.SSH_HOST }}/deploy
+            docker-compose down
+            docker-compose up -d --build
+#        run: |
+#          mkdir -p ~/.ssh
+#          echo "$SSH_PRIVATE_KEY" | sed 's/\r$//' > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
+#
+#      - name: Set up SSH known hosts
+#        run: |
+#          mkdir -p ~/.ssh
+#          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+#
+#      - name: Public IP
+#        id: ip
+#        uses: haythem/public-ip@v1.3
+#
+#      - name: Print Public IP
+#        run: |
+#          echo ${{ steps.ip.outputs.ipv4 }}
+#          echo ${{ steps.ip.outputs.ipv6 }}
+#
+#      - name: Test SSH connection
+#        run: ssh -v -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
 
       #      - name: Test SSH connection
 #        run: ssh -vvv -o StrictHostKeyChecking=no daeun@172.27.8.165 'echo "SSH connection successful"'
